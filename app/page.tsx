@@ -1,17 +1,23 @@
 import Image from "next/image";
+import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 
-export default function Home() {
+const getDocs = async () => {
+  const loader = YoutubeLoader.createFromUrl("https://youtu.be/bZQun8Y4L2A", {
+    language: "en",
+    addVideoInfo: true,
+  });
+
+  const docs = await loader.load();
+  return docs;
+};
+
+export default async function Home() {
+  const docs = await getDocs();
+  console.log("docs", docs);
+
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
