@@ -2,7 +2,15 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Bot, User } from "lucide-react";
+import { Bot, Send, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "./ui/textarea";
+import {
+  AIMessage,
+  HumanMessage,
+  SystemMessage,
+  trimMessages,
+} from "@langchain/core/messages";
 
 type Message = {
   role: "user" | "assistant";
@@ -161,54 +169,69 @@ type ChatProps = {
 
 export const Chat: React.FC<ChatProps> = ({ className }) => {
   const [messages, setMessages] = React.useState<Message[]>(mockMessages);
+  const [input, setInput] = React.useState<string>("");
+  const formRef = React.useRef<HTMLFormElement>(null);
 
-  // React.useEffect(() => {
-  //   setTimeout(() => {
-  //     setMessages((_messages) => [
-  //       ..._messages,
-  //       { role: "assistant", content: "This is a test message 2" },
-  //     ]);
-  //   }, 1000);
+  const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+  };
 
-  //   setTimeout(() => {
-  //     setMessages((_messages) => [
-  //       ..._messages,
-  //       { role: "assistant", content: "This is a test message 3" },
-  //     ]);
-  //   }, 2000);
+  const handleOnKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      formRef.current?.requestSubmit();
+    }
+  };
 
-  //   setTimeout(() => {
-  //     setMessages((_messages) => [
-  //       ..._messages,
-  //       { role: "assistant", content: "This is a test message 4" },
-  //     ]);
-  //   }, 3000);
-
-  //   // const fetchResponse = async () => {
-  //   //   const response = await fetch("/api/chat", {
-  //   //     method: "POST",
-  //   //     body: JSON.stringify({
-  //   //       input:
-  //   //         "What is this YouTube video about? https://www.youtube.com/watch?v=XqZsoesa55w",
-  //   //     }),
-  //   //   });
-  //   //   const data = await response.json();
-  //   //   console.log("data", data);
-  //   //   setMessages(data.content);
-  //   // };
-  //   // fetchResponse();
-  // }, []);
+  const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const input = formData.get("input") as string;
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ input }),
+    });
+    const data = await response.json();
+    setMessages((_messages) => [
+      ..._messages,
+      { role: "assistant", content: data.content },
+    ]);
+  };
 
   return (
-    <main className={cn("flex flex-col gap-4 p-4 overflow-y-auto", className)}>
-      {messages.map((message, index) => {
-        const isUser = message.role === "user";
-        return isUser ? (
-          <UserMessage content={message.content} key={index} />
-        ) : (
-          <AssistantMessage content={message.content} key={index} />
-        );
-      })}
+    <main className={cn("flex flex-col gap-4", className)}>
+      <div className="flex flex-col gap-4 p-8 overflow-y-auto">
+        {messages.map((message, index) => {
+          const isUser = message.role === "user";
+          return isUser ? (
+            <UserMessage content={message.content} key={index} />
+          ) : (
+            <AssistantMessage content={message.content} key={index} />
+          );
+        })}
+      </div>
+
+      <form
+        ref={formRef}
+        onSubmit={handleOnSubmit}
+        className="flex items-end gap-2 m-4"
+      >
+        <Textarea
+          name="input"
+          value={input}
+          onChange={handleOnChange}
+          onKeyDown={handleOnKeyDown}
+          placeholder="Ask me whatever you want"
+          className="resize-none min-h-10 max-h-40 border-slate-700"
+        />
+        <Button
+          disabled={!input.trim()}
+          type="submit"
+          variant="outline"
+          className="flex items-center justify-center bg-slate-800"
+        >
+          <Send size={24} className="text-slate-50" />
+        </Button>
+      </form>
     </main>
   );
 };
@@ -225,7 +248,7 @@ const UserMessage: React.FC<UserMessageProps> = ({ content }) => {
           <p className="text-sm text-slate-50">{content}</p>
         </div>
         <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-800">
-          <User size={20} className="text-slate-50" />
+          <User size={24} className="text-slate-50" />
         </div>
       </div>
     </div>
@@ -241,7 +264,7 @@ const AssistantMessage: React.FC<AssistantMessageProps> = ({ content }) => {
     <div className="flex flex-row justify-start w-full">
       <div className="flex flex-row gap-2 items-center max-w-1/2">
         <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50">
-          <Bot size={20} className="text-slate-800" />
+          <Bot size={24} className="text-slate-800" />
         </div>
         <div className="flex-1 py-2 px-4 rounded-lg bg-slate-50">
           <p className="text-sm text-slate-800">{content}</p>
