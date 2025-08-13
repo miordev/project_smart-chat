@@ -5,170 +5,15 @@ import { cn } from "@/lib/utils";
 import { Bot, Send, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "./ui/textarea";
-import {
-  AIMessage,
-  HumanMessage,
-  SystemMessage,
-  trimMessages,
-} from "@langchain/core/messages";
-
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
-
-const mockMessages: Message[] = [
-  {
-    role: "user",
-    content:
-      "What is this YouTube video about? https://www.youtube.com/watch?v=XqZsoesa55w",
-  },
-  {
-    role: "assistant",
-    content:
-      "It's the Baby Shark Dance by Pinkfong—a children's song with simple, repeatable dance moves.",
-  },
-  {
-    role: "user",
-    content: "Who is the target audience?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Primarily toddlers and young children, but it's family-friendly for everyone.",
-  },
-  {
-    role: "user",
-    content: "How long is it?",
-  },
-  {
-    role: "assistant",
-    content: "About two minutes long, short and easy for kids to follow.",
-  },
-  {
-    role: "user",
-    content: "Why is it so catchy?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Repetition, simple melody, predictable structure, and actions that match the words.",
-  },
-  {
-    role: "user",
-    content: "What are the main dance moves?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Hand chomps for shark jaws, swimming arms, sneaking motions, and a 'run away' move.",
-  },
-  {
-    role: "user",
-    content: "Is it educational at all?",
-  },
-  {
-    role: "assistant",
-    content:
-      "It helps with coordination, following instructions, vocabulary for family members, and rhythm.",
-  },
-  {
-    role: "user",
-    content: "What are the lyrics like?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Very repetitive: 'Baby shark, doo-doo-doo…' introducing baby, mommy, daddy, grandma, grandpa shark.",
-  },
-  {
-    role: "user",
-    content: "Is it safe and appropriate for kids?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Yes—clean content. Just keep screen time balanced and the volume at a comfortable level.",
-  },
-  {
-    role: "user",
-    content: "How popular is this video?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Extremely—billions of views globally, it became a meme and even charted in some countries.",
-  },
-  {
-    role: "user",
-    content: "Which channel uploaded it?",
-  },
-  {
-    role: "assistant",
-    content: "Pinkfong—on the official Pinkfong Kids' Songs & Stories channel.",
-  },
-  {
-    role: "user",
-    content: "Can I watch it with subtitles?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Yes—YouTube captions are available, and there are versions in multiple languages.",
-  },
-  {
-    role: "user",
-    content: "What else can we watch if my kid likes this?",
-  },
-  {
-    role: "assistant",
-    content:
-      "More Pinkfong songs and channels like Super Simple Songs or Cocomelon with similar dance-alongs.",
-  },
-  {
-    role: "user",
-    content: "Any downsides or controversies?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Mainly overuse and screen-time concerns; some found it annoying due to repetition—moderation helps.",
-  },
-  {
-    role: "user",
-    content: "How do I keep my kid engaged while watching?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Model the moves, clap along, pause to repeat sections, and turn it into a movement activity.",
-  },
-  {
-    role: "user",
-    content: "Does it include the whole shark family?",
-  },
-  {
-    role: "assistant",
-    content:
-      "Yes—baby, mommy, daddy, grandma, and grandpa shark appear in sequence.",
-  },
-  {
-    role: "user",
-    content: "Summarize the video in one sentence.",
-  },
-  {
-    role: "assistant",
-    content:
-      "A simple, upbeat dance-along introducing the shark family with repetitive 'doo-doo-doo' lyrics and matching actions.",
-  },
-];
+import { AIMessage, HumanMessage, BaseMessage } from "@langchain/core/messages";
+import { MessagePayload } from "@/app/types/definitions";
 
 type ChatProps = {
   className?: string;
 };
 
 export const Chat: React.FC<ChatProps> = ({ className }) => {
-  const [messages, setMessages] = React.useState<Message[]>(mockMessages);
+  const [messages, setMessages] = React.useState<BaseMessage[]>([]);
   const [input, setInput] = React.useState<string>("");
   const formRef = React.useRef<HTMLFormElement>(null);
 
@@ -178,35 +23,41 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
 
   const handleOnKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
       formRef.current?.requestSubmit();
     }
   };
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const input = formData.get("input") as string;
+    if (!input.trim()) {
+      return;
+    }
+
+    setInput("");
+    const userMessage = new HumanMessage(input);
+    const messagePayloads: MessagePayload[] = [...messages, userMessage].map(
+      (message) => ({
+        type: message.getType(),
+        content: message.content.toString(),
+      })
+    );
+
     const response = await fetch("/api/chat", {
       method: "POST",
-      body: JSON.stringify({ input }),
+      body: JSON.stringify({ messagePayloads }),
     });
-    const data = await response.json();
-    setMessages((_messages) => [
-      ..._messages,
-      { role: "assistant", content: data.content },
-    ]);
+    const data = (await response.json()) as { content: string };
+    const assistantMessage = new AIMessage(data.content);
+
+    setMessages([...messages, userMessage, assistantMessage]);
   };
 
   return (
     <main className={cn("flex flex-col gap-4", className)}>
-      <div className="flex flex-col gap-4 p-8 overflow-y-auto">
+      <div className="flex-1 flex flex-col gap-4 p-8 overflow-y-auto">
         {messages.map((message, index) => {
-          const isUser = message.role === "user";
-          return isUser ? (
-            <UserMessage content={message.content} key={index} />
-          ) : (
-            <AssistantMessage content={message.content} key={index} />
-          );
+          return <Message message={message} key={index} />;
         })}
       </div>
 
@@ -234,6 +85,23 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
       </form>
     </main>
   );
+};
+
+type MessageProps = {
+  message: BaseMessage;
+};
+
+const Message: React.FC<MessageProps> = ({ message }) => {
+  const isHuman = message.getType() === "human";
+  const isAssistant = message.getType() === "ai";
+
+  if (isHuman) {
+    return <UserMessage content={message.content.toString()} />;
+  }
+  if (isAssistant) {
+    return <AssistantMessage content={message.content.toString()} />;
+  }
+  return null;
 };
 
 type UserMessageProps = {
