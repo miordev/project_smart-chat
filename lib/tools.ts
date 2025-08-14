@@ -1,6 +1,14 @@
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
+import {
+  ingestYoutubeVideo,
+  getYoutubeVideoId,
+  isVideoIndexed,
+  retrieveFromVideo,
+  getLastVideoId,
+  query,
+} from "@/lib/rag";
 
 const calculatorSchema = z.object({
   operation: z
@@ -32,46 +40,45 @@ const calculatorTool = tool(
   }
 );
 
-const youtubeTranscriptSchema = z.object({
-  url: z
-    .string()
-    .describe(
-      "YouTube video URL (e.g., 'https://www.youtube.com/watch?v=_yh410lA9yI')."
-    ),
+const youtubeRagSearchSchema = z.object({
+  question: z.string().describe("A question about the video."),
+  url: z.string().describe("YouTube URL of the video to search."),
 });
 
-const youtubeTranscriptTool = tool(
-  async ({ url }) => {
+/**
+ * Retrieves relevant chunks from the already indexed video and returns context for answering.
+ * If a URL is provided and that video is not indexed, this tool will NOT re-fetch automatically.
+ */
+const youtubeRagSearchTool = tool(
+  async ({ question, url }) => {
+    console.log("HOLA", {
+      question,
+      url,
+    });
     try {
-      const loader = YoutubeLoader.createFromUrl(url, {
-        // TODO: Add language support
-        // language: "en",
-        // TODO: What is addVideoInfo?
-        addVideoInfo: false,
-      });
-      console.log("URL: ", url);
-      const docs = await loader.load();
-      const text = docs
-        .map((d) => d.pageContent)
-        .join("\n\n")
-        .trim();
-      // console.log("text: ", text);
-      return text.length ? text : "No transcript found for this video.";
+      const results = await query(url, question, 5);
+      console.log("results", results);
+      return `
+        Answer the question based on the context provided. If you can't answer the question, just say that you don't know, do not try to make up an answer.
+          - Question: ${question}
+          - Context: ${results.map((r) => r.pageContent).join("\n")}
+      `;
     } catch (err: unknown) {
-      return `Failed to load YouTube transcript: ${
+      return `RAG retrieval failed: ${
         err instanceof Error ? err.message : String(err)
       }`;
     }
   },
   {
-    name: "youtube_transcript",
+    name: "youtube_rag_search",
     description:
-      "Fetches the transcript text from a YouTube video. Use this to answer questions about the video's content.",
-    schema: youtubeTranscriptSchema,
+      "Answers questions about an YouTube video by retrieving relevant transcript chunks from the vector store",
+    schema: youtubeRagSearchSchema,
   }
 );
 
 export const toolsByName = {
   calculator: calculatorTool,
-  youtube_transcript: youtubeTranscriptTool,
+  // youtube_transcript: youtubeTranscriptTool,
+  youtube_rag_search: youtubeRagSearchTool,
 };
