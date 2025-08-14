@@ -17,6 +17,9 @@ importers:
       '@langchain/openai':
         specifier: ^0.6.7
         version: 0.6.7(@langchain/core@0.3.69(openai@5.12.2(ws@8.18.3)(zod@4.0.17)))(ws@8.18.3)
+      '@langchain/textsplitters':
+        specifier: ^0.1.0
+        version: 0.1.0(@langchain/core@0.3.69(openai@5.12.2(ws@8.18.3)(zod@4.0.17)))
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@19.1.10)(react@19.1.0)
@@ -26,6 +29,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      langchain:
+        specifier: ^0.3.30
+        version: 0.3.30(@langchain/core@0.3.69(openai@5.12.2(ws@8.18.3)(zod@4.0.17)))(axios@1.11.0)(openai@5.12.2(ws@8.18.3)(zod@4.0.17))(ws@8.18.3)
       lucide-react:
         specifier: ^0.539.0
         version: 0.539.0(react@19.1.0)
