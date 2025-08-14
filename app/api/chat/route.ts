@@ -35,6 +35,7 @@ const getCompletion = async (
     for (const toolCall of aiMessage.tool_calls) {
       const selectedTool =
         toolsByName[toolCall.name as keyof typeof toolsByName];
+      // TODO: Fix types
       const toolMessage = await selectedTool.invoke(toolCall);
       history = [...history, toolMessage];
     }
