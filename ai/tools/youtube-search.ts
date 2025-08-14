@@ -2,6 +2,7 @@ import { CharacterTextSplitter } from "@langchain/textsplitters";
 import { Document } from "@langchain/core/documents";
 import { DocumentId, ToolName } from "@/ai/types";
 import { getStore, createStore } from "@/ai/stores";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { tool } from "@langchain/core/tools";
 import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 import { z } from "zod";
@@ -50,7 +51,9 @@ const documentsFromYoutubeVideo = async (
   }
 };
 
-const loadOrCreateStore = async (videoUrl: string) => {
+const loadYoutubeVideoStore = async (
+  videoUrl: string
+): Promise<MemoryVectorStore> => {
   const videoId = getYoutubeVideoId(videoUrl);
   if (!videoId) {
     throw new Error("Invalid YouTube URL");
@@ -76,7 +79,7 @@ export const youtubeSearchTool = tool(
         throw new Error("Invalid YouTube URL");
       }
 
-      const store = await loadOrCreateStore(videoUrl);
+      const store = await loadYoutubeVideoStore(videoUrl);
       const results = await store.similaritySearch(question);
 
       return `
