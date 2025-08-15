@@ -1,7 +1,7 @@
 import { CharacterTextSplitter } from "@langchain/textsplitters";
-import { createStore } from "./vector-store-registry";
+import { createStore, getStore } from "./vector-store-registry";
 import { Document } from "@langchain/core/documents";
-import { DocumentId } from "../types";
+import { DocumentId, LoadedStore } from "../types";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 
@@ -12,7 +12,7 @@ const getPdfId = (file: File): DocumentId | null => {
     return null;
   }
 
-  return cleanFilename;
+  return `pdf-${cleanFilename}`;
 };
 
 const getDocumentsFromPdf = async (file: File): Promise<Document[]> => {
@@ -28,21 +28,30 @@ const getDocumentsFromPdf = async (file: File): Promise<Document[]> => {
   return await splitter.splitDocuments(loadedDocuments);
 };
 
-// TODO: Fix the types for the return value
-export const loadPdfStore = async (
-  file: File
-): Promise<{ id: DocumentId; store: MemoryVectorStore }> => {
+export const loadPdfStore = async (file: File): Promise<LoadedStore> => {
   if (file.type !== "application/pdf") {
     throw new Error("Invalid PDF file type");
   }
 
   const pdfId = getPdfId(file);
-  console.log("pdfId", pdfId);
   if (!pdfId) {
     throw new Error("Invalid PDF filename");
+  }
+
+  const loadedStore = getStore(pdfId);
+  if (loadedStore) {
+    return { id: pdfId, store: loadedStore };
   }
 
   const documents = await getDocumentsFromPdf(file);
   const newStore = await createStore(pdfId, documents);
   return { id: pdfId, store: newStore };
+};
+
+export const getPdfStore = (pdfId: DocumentId): MemoryVectorStore => {
+  const loadedStore = getStore(pdfId);
+  if (!loadedStore) {
+    throw new Error("PDF document not found");
+  }
+  return loadedStore;
 };

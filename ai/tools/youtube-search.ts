@@ -13,7 +13,7 @@ export const youtubeSearchTool = tool(
     try {
       const { question, videoUrl } = youtubeSearchSchema.parse(input);
 
-      const store = await loadYoutubeStore(videoUrl);
+      const { store } = await loadYoutubeStore(videoUrl);
       const results = await store.similaritySearch(question);
 
       return `
@@ -22,13 +22,13 @@ export const youtubeSearchTool = tool(
           - Context: ${results.map((r) => r.pageContent).join("\n")}
       `;
     } catch (err: unknown) {
-      return `RAG retrieval failed: ${
+      return `YouTube RAG failed: ${
         err instanceof Error ? err.message : String(err)
       }`;
     }
   },
   {
-    name: ToolName.YOUTUBE_RAG_SEARCH,
+    name: ToolName.YOUTUBE_SEARCH,
     description:
       "Answers questions about an YouTube video by retrieving relevant transcript chunks from the vector store",
     schema: youtubeSearchSchema,

@@ -13,14 +13,12 @@ export const pdfSearchTool = tool(
     try {
       const { question, documentId } = pdfSearchSchema.parse(input);
 
-      // TODO: Load PDF instead of generic store
       const store = getStore(documentId);
-      console.log("store", store);
       if (!store) {
         return `PDF document with ID "${documentId}" not found. Please upload the PDF first.`;
       }
 
-      const results = await store.similaritySearch(question, 3);
+      const results = await store.similaritySearch(question);
 
       return `
         Answer the question based on the context provided from the PDF document. If you can't answer the question, just say that you don't know, do not try to make up an answer.
@@ -28,13 +26,13 @@ export const pdfSearchTool = tool(
           - Context: ${results.map((r) => r.pageContent).join("\n")}
       `;
     } catch (err: unknown) {
-      return `PDF RAG retrieval failed: ${
+      return `PDF RAG failed: ${
         err instanceof Error ? err.message : String(err)
       }`;
     }
   },
   {
-    name: ToolName.PDF_RAG_SEARCH,
+    name: ToolName.PDF_SEARCH,
     description:
       "Answers questions about an uploaded PDF document by retrieving relevant chunks from the vector store",
     schema: pdfSearchSchema,

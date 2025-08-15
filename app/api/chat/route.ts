@@ -3,9 +3,9 @@ import {
   BaseMessage,
   HumanMessage,
   SystemMessage,
-} from "@langchain/core/messages";
+  type MessagePayload,
+} from "@/ai/types";
 import { completion } from "@/ai/completion";
-import { MessagePayload } from "@/app/types/definitions";
 import type { NextRequest } from "next/server";
 
 const toBaseMessage = (payload: MessagePayload): BaseMessage => {
