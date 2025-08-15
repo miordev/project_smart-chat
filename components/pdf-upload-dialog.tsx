@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 import { FilePlus2, FileText, LoaderCircle } from "lucide-react";
 
 type PdfUploadDialogProps = {
-  onUploadSuccess: (documentId: string) => void;
+  onUploadSuccess: (documentId: string, documentName: string) => void;
 };
 
 export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
@@ -25,7 +25,7 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || file.size > 10 * 1024 * 1024 || !file.type.includes("pdf")) {
       return;
@@ -45,8 +45,9 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
       // TODO: Handle errors
       // TODO: Handle success
       if (response.ok) {
-        const data = await response.json();
-        onUploadSuccess(data.documentId);
+        // TODO: Add type for the response
+        const data = (await response.json()) as { id: string; name: string };
+        onUploadSuccess(data.id, data.name);
         setIsOpen(false);
       }
       // else {
@@ -84,7 +85,7 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
               ref={fileInputRef}
               type="file"
               accept=".pdf"
-              onChange={handleFileUpload}
+              onChange={handleOnChange}
               className="hidden"
               id="pdf-upload"
             />

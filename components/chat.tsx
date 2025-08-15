@@ -2,17 +2,18 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Bot, Send, User } from "lucide-react";
+import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { PdfUploadDialog } from "@/components/pdf-upload-dialog";
 import {
   AIMessage,
   HumanMessage,
   BaseMessage,
   SystemMessage,
-} from "@langchain/core/messages";
-import { MessagePayload } from "@/app/types/definitions";
-import { PdfUploadDialog } from "@/components/pdf-upload-dialog";
+  type MessagePayload,
+} from "@/ai/types";
+import { BubbleMessage } from "@/components/bubble-message";
 
 type ChatProps = {
   className?: string;
@@ -40,8 +41,8 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
       return;
     }
 
-    setInput("");
     const userMessage = new HumanMessage(input);
+    setInput("");
     const messagePayloads: MessagePayload[] = [...messages, userMessage].map(
       (message) => ({
         type: message.getType(),
@@ -59,23 +60,26 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
     setMessages([...messages, userMessage, assistantMessage]);
   };
 
-  const handlePdfUploaded = (documentId: string) => {
+  const handleOnUploadSuccess = (documentId: string, documentName: string) => {
     const systemMessage = new SystemMessage({
-      content: `PDF document "${documentId}" has been loaded. You can now ask questions about its contents.`,
+      content: `A PDF document with ID "${documentId}" has been loaded into the vector store. You can now use the pdf-search tool to query its contents. Use this document ID when making RAG queries to ensure accurate document retrieval.`,
     });
-    setMessages((prev) => [...prev, systemMessage]);
+    const iaMessage = new AIMessage({
+      content: `You've successfully loaded "${documentName}". Feel free to ask me any questions about its contents - I'm here to help!`,
+    });
+    setMessages((prev) => [...prev, systemMessage, iaMessage]);
   };
 
   return (
     <main className={cn("flex flex-col gap-4", className)}>
       <div className="flex-1 flex flex-col gap-4 p-8 overflow-y-auto">
         {messages.map((message, index) => {
-          return <Message message={message} key={index} />;
+          return <BubbleMessage message={message} key={index} />;
         })}
       </div>
 
       <div className="flex flex-row gap-2 m-4">
-        <PdfUploadDialog onUploadSuccess={handlePdfUploaded} />
+        <PdfUploadDialog onUploadSuccess={handleOnUploadSuccess} />
 
         <form
           ref={formRef}
@@ -101,60 +105,5 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
         </form>
       </div>
     </main>
-  );
-};
-
-type MessageProps = {
-  message: BaseMessage;
-};
-
-const Message: React.FC<MessageProps> = ({ message }) => {
-  const isHuman = message.getType() === "human";
-  const isAssistant = message.getType() === "ai";
-
-  if (isHuman) {
-    return <UserMessage content={message.content.toString()} />;
-  }
-  if (isAssistant) {
-    return <AssistantMessage content={message.content.toString()} />;
-  }
-  return null;
-};
-
-type UserMessageProps = {
-  content: string;
-};
-
-const UserMessage: React.FC<UserMessageProps> = ({ content }) => {
-  return (
-    <div className="flex flex-row justify-end w-full">
-      <div className="flex flex-row gap-2 items-center max-w-1/2">
-        <div className="flex-1 py-2 px-4 rounded-lg bg-slate-800">
-          <p className="text-sm text-slate-50">{content}</p>
-        </div>
-        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-800">
-          <User size={24} className="text-slate-50" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-type AssistantMessageProps = {
-  content: string;
-};
-
-const AssistantMessage: React.FC<AssistantMessageProps> = ({ content }) => {
-  return (
-    <div className="flex flex-row justify-start w-full">
-      <div className="flex flex-row gap-2 items-center max-w-1/2">
-        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50">
-          <Bot size={24} className="text-slate-800" />
-        </div>
-        <div className="flex-1 py-2 px-4 rounded-lg bg-slate-50">
-          <p className="text-sm text-slate-800">{content}</p>
-        </div>
-      </div>
-    </div>
   );
 };

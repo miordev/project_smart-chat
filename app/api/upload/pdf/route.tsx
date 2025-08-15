@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   try {
     const { id } = await loadPdfStore(file);
     return NextResponse.json(
-      { message: "File uploaded", documentId: id },
+      { message: "File uploaded", id, name: file.name },
       { status: 200 }
     );
   } catch {
