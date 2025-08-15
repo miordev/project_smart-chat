@@ -1,7 +1,7 @@
 import { Document } from "@langchain/core/documents";
-import { embeddings } from "./openai";
+import { embeddings } from "../openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { DocumentId } from "./types";
+import { DocumentId } from "../types";
 
 const stores = new Map<DocumentId, MemoryVectorStore>();
 

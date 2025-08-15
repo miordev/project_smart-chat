@@ -1,4 +1,9 @@
-import { AIMessage, BaseMessage, HumanMessage } from "@langchain/core/messages";
+import {
+  AIMessage,
+  BaseMessage,
+  HumanMessage,
+  SystemMessage,
+} from "@langchain/core/messages";
 import { completion } from "@/ai/completion";
 import { MessagePayload } from "@/app/types/definitions";
 import type { NextRequest } from "next/server";
@@ -9,6 +14,8 @@ const toBaseMessage = (payload: MessagePayload): BaseMessage => {
       return new HumanMessage(payload.content);
     case "ai":
       return new AIMessage(payload.content);
+    case "system":
+      return new SystemMessage(payload.content);
     default:
       throw new Error(`Unknown message type: ${payload.type}`);
   }
