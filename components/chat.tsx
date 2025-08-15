@@ -42,6 +42,7 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
     }
 
     const userMessage = new HumanMessage(input);
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     const messagePayloads: MessagePayload[] = [...messages, userMessage].map(
       (message) => ({
@@ -57,7 +58,7 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
     const data = (await response.json()) as { content: string };
     const assistantMessage = new AIMessage(data.content);
 
-    setMessages([...messages, userMessage, assistantMessage]);
+    setMessages((prev) => [...prev, assistantMessage]);
   };
 
   const handleOnUploadSuccess = (documentId: string, documentName: string) => {
