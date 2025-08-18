@@ -11,6 +11,7 @@ export {
 export enum ToolName {
   CALCULATOR = "calculator",
   YOUTUBE_SEARCH = "youtube_search",
+  WEBSITE_SEARCH = "website_search",
   PDF_SEARCH = "pdf_search",
 }
 
