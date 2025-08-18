@@ -98,38 +98,44 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
   };
 
   return (
-    <main className={cn("flex flex-col overflow-hidden", className)}>
-      <div className="flex-1 flex flex-col gap-4 p-8 overflow-y-auto">
-        {messages.map((message, index) => {
-          return <BubbleMessage message={message} key={index} />;
-        })}
+    <main
+      className={cn("flex flex-col items-center overflow-hidden", className)}
+    >
+      <div className="flex-1 w-full p-8 justify-items-center overflow-y-auto">
+        <div className="flex flex-col gap-6 max-w-4xl">
+          {messages.map((message, index) => {
+            return <BubbleMessage message={message} key={index} />;
+          })}
+        </div>
       </div>
 
-      <div className="flex flex-row gap-2 m-4">
-        <PdfUploadDialog onUploadSuccess={handleOnUploadSuccess} />
+      <div className="p-4 w-full justify-items-center border-t border-slate-500">
+        <div className="flex flex-row gap-2 w-full max-w-4xl">
+          <PdfUploadDialog onUploadSuccess={handleOnUploadSuccess} />
 
-        <form
-          ref={formRef}
-          onSubmit={handleOnSubmit}
-          className="flex-1 flex items-end gap-2"
-        >
-          <Textarea
-            name="input"
-            value={input}
-            onChange={handleOnChange}
-            onKeyDown={handleOnKeyDown}
-            placeholder="Ask me whatever you want"
-            className="resize-none min-h-10 max-h-40 border-slate-700"
-          />
-          <Button
-            disabled={isDisabled}
-            type="submit"
-            variant="outline"
-            className="flex items-center justify-center bg-slate-800"
+          <form
+            ref={formRef}
+            onSubmit={handleOnSubmit}
+            className="flex-1 flex items-end gap-2"
           >
-            <Send size={24} className="text-slate-50" />
-          </Button>
-        </form>
+            <Textarea
+              name="input"
+              value={input}
+              onChange={handleOnChange}
+              onKeyDown={handleOnKeyDown}
+              placeholder="Ask me whatever you want"
+              className="resize-none min-h-8 max-h-40 border-slate-700"
+            />
+            <Button
+              disabled={isDisabled}
+              type="submit"
+              variant="outline"
+              className="flex items-center justify-center bg-slate-800"
+            >
+              <Send size={24} className="text-slate-50" />
+            </Button>
+          </form>
+        </div>
       </div>
     </main>
   );

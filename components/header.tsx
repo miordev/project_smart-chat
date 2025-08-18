@@ -9,7 +9,7 @@ export const Header = ({ className }: HeaderProps) => {
   return (
     <header
       className={cn(
-        "flex flex-row gap-4 px-4 py-2 justify-center items-center",
+        "flex flex-row gap-4 px-4 py-2 justify-center items-center border-b border-slate-500",
         className
       )}
     >

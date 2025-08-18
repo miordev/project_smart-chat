@@ -27,7 +27,7 @@ type BubbleHumanMessageProps = {
 const BubbleHumanMessage: React.FC<BubbleHumanMessageProps> = ({ content }) => {
   return (
     <div className="flex flex-row justify-end w-full">
-      <div className="flex flex-row gap-2 items-center max-w-1/2">
+      <div className="flex flex-row gap-2 items-start max-w-3/4">
         <div className="flex-1 py-2 px-4 rounded-lg border bg-slate-800">
           <p className="text-sm text-slate-50">{content}</p>
         </div>
@@ -46,7 +46,7 @@ type BubbleAiMessageProps = {
 const BubbleAiMessage: React.FC<BubbleAiMessageProps> = ({ content }) => {
   return (
     <div className="flex flex-row justify-start w-full">
-      <div className="flex flex-row gap-2 items-center max-w-1/2">
+      <div className="flex flex-row gap-2 items-start max-w-3/4">
         <div className="w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-r from-blue-300 to-indigo-500">
           <Bot size={16} className="text-slate-800" />
         </div>
