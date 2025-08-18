@@ -111,8 +111,8 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
       </div>
 
       <Separator />
-      <div className="p-4 w-full justify-items-center">
-        <div className="flex flex-row gap-2 w-full max-w-4xl">
+      <div className="px-8 py-4 w-full justify-items-center">
+        <div className="flex flex-row items-end gap-2 w-full max-w-4xl">
           <PdfUploadDialog onUploadSuccess={handleOnUploadSuccess} />
 
           <form
