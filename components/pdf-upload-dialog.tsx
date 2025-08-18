@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { FilePlus2, FileText, LoaderCircle } from "lucide-react";
 
 type PdfUploadDialogProps = {
@@ -64,21 +64,24 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center justify-center">
+        <Button
+          variant="destructive"
+          className="flex items-center justify-center rounded-full"
+        >
           <FilePlus2 size={24} />
         </Button>
       </DialogTrigger>
       <DialogContent aria-describedby="upload-pdf-dialog-description">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <FileText size={24} className="text-orange-400" />
+            <FileText size={24} className="text-primary" />
             Upload PDF Document
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center w-full gap-2">
-          <div className="flex flex-col items-center justify-center w-full gap-4 p-8 border-2 border-dashed rounded-lg transition-colors hover:border-orange-400">
-            <FileText size={48} className="text-slate-500" />
-            <DialogDescription className="text-sm text-slate-500">
+          <div className="flex flex-col items-center justify-center w-full gap-4 p-8 border-2 border-dashed rounded-lg transition-colors hover:border-primary">
+            <FileText size={48} className="text-muted-foreground" />
+            <DialogDescription className="text-sm text-muted-foreground">
               Drag and drop your PDF here, or click to browse
             </DialogDescription>
             <input
@@ -90,7 +93,6 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
               id="pdf-upload"
             />
             <Button
-              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
             >
@@ -104,7 +106,7 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
               )}
             </Button>
           </div>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             Supported format: PDF files up to 10MB
           </p>
         </div>

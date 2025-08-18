@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Send } from "lucide-react";
+import { SendHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { PdfUploadDialog } from "@/components/pdf-upload-dialog";
@@ -14,6 +14,7 @@ import {
   type MessagePayload,
 } from "@/ai/types";
 import { BubbleMessage } from "@/components/bubble-message";
+import { Separator } from "@/components/ui/separator";
 
 type ChatProps = {
   className?: string;
@@ -109,7 +110,8 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
         </div>
       </div>
 
-      <div className="p-4 w-full justify-items-center border-t border-slate-500">
+      <Separator />
+      <div className="p-4 w-full justify-items-center">
         <div className="flex flex-row gap-2 w-full max-w-4xl">
           <PdfUploadDialog onUploadSuccess={handleOnUploadSuccess} />
 
@@ -124,15 +126,15 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
               onChange={handleOnChange}
               onKeyDown={handleOnKeyDown}
               placeholder="Ask me whatever you want"
-              className="resize-none min-h-8 max-h-40 border-slate-700"
+              className="resize-none min-h-8 max-h-40 border-muted-foreground"
             />
             <Button
               disabled={isDisabled}
               type="submit"
-              variant="outline"
-              className="flex items-center justify-center bg-slate-800"
+              variant="default"
+              className="flex items-center justify-center rounded-full"
             >
-              <Send size={24} className="text-slate-50" />
+              <SendHorizontal size={24} className="text-primary-foreground" />
             </Button>
           </form>
         </div>
