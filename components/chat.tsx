@@ -19,8 +19,15 @@ type ChatProps = {
   className?: string;
 };
 
+const INITIAL_MESSAGE = new AIMessage({
+  content:
+    "Hello! I'm your AI assistant. You can paste YouTube links or website URLs directly in the chat, and I'll automatically load them for analysis. You can also upload PDFs using the button above. How can I help you today?",
+});
+
 export const Chat: React.FC<ChatProps> = ({ className }) => {
-  const [messages, setMessages] = React.useState<BaseMessage[]>([]);
+  const [messages, setMessages] = React.useState<BaseMessage[]>([
+    INITIAL_MESSAGE,
+  ]);
   const [input, setInput] = React.useState<string>("");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -91,7 +98,7 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
   };
 
   return (
-    <main className={cn("flex flex-col gap-4", className)}>
+    <main className={cn("flex flex-col overflow-hidden", className)}>
       <div className="flex-1 flex flex-col gap-4 p-8 overflow-y-auto">
         {messages.map((message, index) => {
           return <BubbleMessage message={message} key={index} />;
