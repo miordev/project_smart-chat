@@ -22,7 +22,10 @@ type ChatProps = {
 export const Chat: React.FC<ChatProps> = ({ className }) => {
   const [messages, setMessages] = React.useState<BaseMessage[]>([]);
   const [input, setInput] = React.useState<string>("");
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   const formRef = React.useRef<HTMLFormElement>(null);
+  const isDisabled = !input.trim() || isLoading;
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
@@ -37,28 +40,44 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!input.trim()) {
+    if (isDisabled) {
       return;
     }
 
     const userMessage = new HumanMessage(input);
-    setMessages((prev) => [...prev, userMessage]);
+    const updatedConversation = [...messages, userMessage];
+    const pendingMessage = new AIMessage("...");
+
     setInput("");
-    const messagePayloads: MessagePayload[] = [...messages, userMessage].map(
+    setMessages([...updatedConversation, pendingMessage]);
+    setIsLoading(true);
+
+    const messagePayloads: MessagePayload[] = updatedConversation.map(
       (message) => ({
         type: message.getType(),
         content: message.content.toString(),
       })
     );
 
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      body: JSON.stringify({ messagePayloads }),
-    });
-    const data = (await response.json()) as { content: string };
-    const assistantMessage = new AIMessage(data.content);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        body: JSON.stringify({ messagePayloads }),
+      });
+      const data = (await response.json()) as { content: string };
+      const assistantMessage = new AIMessage(data.content);
 
-    setMessages((prev) => [...prev, assistantMessage]);
+      setMessages([...updatedConversation, assistantMessage]);
+    } catch (err: unknown) {
+      const errorMessage = new AIMessage(
+        "An error occurred while processing your message"
+      );
+      setMessages([...updatedConversation, errorMessage]);
+
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleOnUploadSuccess = (documentId: string, documentName: string) => {
@@ -96,7 +115,7 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
             className="resize-none min-h-10 max-h-40 border-slate-700"
           />
           <Button
-            disabled={!input.trim()}
+            disabled={isDisabled}
             type="submit"
             variant="outline"
             className="flex items-center justify-center bg-slate-800"
