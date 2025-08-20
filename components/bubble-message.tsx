@@ -27,11 +27,11 @@ type BubbleHumanMessageProps = {
 const BubbleHumanMessage: React.FC<BubbleHumanMessageProps> = ({ content }) => {
   return (
     <div className="flex flex-row justify-end w-full">
-      <div className="flex flex-row gap-2 items-start max-w-3/4">
+      <div className="flex flex-row gap-2 items-start max-w-4/5">
         <div className="flex-1 py-2 px-4 rounded-xl shadow-sm border-2 border-primary-foreground bg-primary">
-          <p className="text-sm text-primary-foreground">{content}</p>
+          <p className="text-sm break-all text-primary-foreground">{content}</p>
         </div>
-        <div className="w-8 h-8 rounded-full flex items-center justify-center border-2 border-primary-foreground bg-primary">
+        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center border-2 border-primary-foreground bg-primary">
           <User size={16} className="text-primary-foreground" />
         </div>
       </div>
@@ -47,11 +47,13 @@ const BubbleAiMessage: React.FC<BubbleAiMessageProps> = ({ content }) => {
   return (
     <div className="flex flex-row justify-start w-full">
       <div className="flex flex-row gap-2 items-start max-w-3/4">
-        <div className="w-8 h-8 rounded-full flex items-center justify-center border-2 border-secondary-foreground bg-secondary">
+        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center border-2 border-secondary-foreground bg-secondary">
           <Bot size={16} className="text-secondary-foreground" />
         </div>
         <div className="flex-1 py-2 px-4 rounded-xl shadow-sm border-2 border-secondary-foreground bg-secondary">
-          <p className="text-sm text-secondary-foreground">{content}</p>
+          <p className="text-sm break-all text-secondary-foreground">
+            {content}
+          </p>
         </div>
       </div>
     </div>

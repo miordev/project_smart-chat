@@ -125,13 +125,14 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
               value={input}
               onChange={handleOnChange}
               onKeyDown={handleOnKeyDown}
-              placeholder="Ask me whatever you want"
-              className="resize-none min-h-8 max-h-40 border-muted-foreground text-base"
+              placeholder="Ask me anything..."
+              className="resize-none min-h-8 max-h-40 break-all border-muted-foreground text-base"
             />
             <Button
               disabled={isDisabled}
               type="submit"
               variant="default"
+              size="icon"
               className="flex items-center justify-center rounded-full"
             >
               <SendHorizontal size={24} className="text-primary-foreground" />
