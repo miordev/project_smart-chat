@@ -102,8 +102,8 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
     <main
       className={cn("flex flex-col items-center overflow-hidden", className)}
     >
-      <div className="flex-1 w-full p-4 sm:p-8 justify-items-center overflow-y-auto">
-        <div className="flex flex-col gap-4 sm:gap-6 max-w-4xl">
+      <div className="flex-1 p-4 sm:p-8 justify-items-center max-w-dvw sm:max-w-4xl overflow-y-auto">
+        <div className="flex flex-col gap-4 sm:gap-6 w-full">
           {messages.map((message, index) => {
             return <BubbleMessage message={message} key={index} />;
           })}
@@ -111,14 +111,14 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
       </div>
 
       <Separator />
-      <div className="px-4 sm:px-8 py-4 w-full justify-items-center">
-        <div className="flex flex-row items-end gap-2 w-full max-w-4xl">
+      <div className="px-4 sm:px-8 py-4 w-full max-w-dvw sm:max-w-4xl justify-items-center">
+        <div className="flex flex-row items-end gap-2 w-full">
           <PdfUploadDialog onUploadSuccess={handleOnUploadSuccess} />
 
           <form
             ref={formRef}
             onSubmit={handleOnSubmit}
-            className="flex-1 flex items-end gap-2"
+            className="min-w-0 flex-1 flex items-end gap-2"
           >
             <Textarea
               name="input"
@@ -126,7 +126,7 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
               onChange={handleOnChange}
               onKeyDown={handleOnKeyDown}
               placeholder="Ask me anything..."
-              className="resize-none min-h-8 max-h-40 break-all border-muted-foreground text-base"
+              className="resize-none min-h-8 max-h-40 break-words border-muted-foreground text-base"
             />
             <Button
               disabled={isDisabled}

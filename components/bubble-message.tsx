@@ -26,13 +26,15 @@ type BubbleHumanMessageProps = {
 
 const BubbleHumanMessage: React.FC<BubbleHumanMessageProps> = ({ content }) => {
   return (
-    <div className="flex flex-row justify-end w-full">
+    <div className="flex flex-row justify-end">
       <div className="flex flex-row gap-2 items-start max-w-4/5">
-        <div className="flex-1 py-2 px-4 rounded-xl shadow-sm border-2 border-primary-foreground bg-primary">
-          <p className="text-sm break-all text-primary-foreground">{content}</p>
+        <div className="min-w-0 flex-1 py-2 px-4 rounded-xl shadow-sm border-2 border-primary-foreground bg-primary">
+          <p className="text-sm break-words text-primary-foreground">
+            {content}
+          </p>
         </div>
-        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center border-2 border-primary-foreground bg-primary">
-          <User size={16} className="text-primary-foreground" />
+        <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center border-2 border-primary-foreground bg-primary">
+          <User size={12} className="text-primary-foreground" />
         </div>
       </div>
     </div>
@@ -45,13 +47,13 @@ type BubbleAiMessageProps = {
 
 const BubbleAiMessage: React.FC<BubbleAiMessageProps> = ({ content }) => {
   return (
-    <div className="flex flex-row justify-start w-full">
-      <div className="flex flex-row gap-2 items-start max-w-3/4">
-        <div className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center border-2 border-secondary-foreground bg-secondary">
-          <Bot size={16} className="text-secondary-foreground" />
+    <div className="flex flex-row justify-start">
+      <div className="flex flex-row gap-2 items-start max-w-4/5">
+        <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center border-2 border-secondary-foreground bg-secondary">
+          <Bot size={12} className="text-secondary-foreground" />
         </div>
-        <div className="flex-1 py-2 px-4 rounded-xl shadow-sm border-2 border-secondary-foreground bg-secondary">
-          <p className="text-sm break-all text-secondary-foreground">
+        <div className="min-w-0 flex-1 py-2 px-4 rounded-xl shadow-sm border-2 border-secondary-foreground bg-secondary">
+          <p className="text-sm break-words text-secondary-foreground">
             {content}
           </p>
         </div>

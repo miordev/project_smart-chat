@@ -11,13 +11,13 @@ export default function HomePage() {
   const [state, action, pending] = React.useActionState(signin, {});
 
   return (
-    <div className="min-h-[100dvh] flex justify-center items-center p-4 bg-accent/50">
+    <div className="flex h-[100dvh] justify-center items-center p-4 bg-accent/50">
       <div className="flex flex-col gap-6 w-full max-w-md rounded-lg p-4 sm:p-6 border bg-card">
         <div className="flex flex-row gap-2 items-center justify-center">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-tr from-primary to-secondary">
             <Bot size={24} />
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col">
             <h1 className="text-2xl font-bold text-primary">Smart Chat</h1>
             <div className="flex flex-row gap-1 items-center">
               <p className="text-sm text-muted-foreground">Weaving knowledge</p>
