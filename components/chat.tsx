@@ -102,11 +102,13 @@ export const Chat: React.FC<ChatProps> = ({ className }) => {
     <main
       className={cn("flex flex-col items-center overflow-hidden", className)}
     >
-      <div className="flex-1 p-4 sm:p-8 justify-items-center max-w-dvw sm:max-w-4xl overflow-y-auto">
-        <div className="flex flex-col gap-4 sm:gap-6 w-full">
-          {messages.map((message, index) => {
-            return <BubbleMessage message={message} key={index} />;
-          })}
+      <div className="flex-1 p-4 sm:p-8 justify-items-center w-full overflow-y-auto">
+        <div className="max-w-dvw sm:max-w-4xl">
+          <div className="flex flex-col gap-4 sm:gap-6 w-full">
+            {messages.map((message, index) => {
+              return <BubbleMessage message={message} key={index} />;
+            })}
+          </div>
         </div>
       </div>
 
