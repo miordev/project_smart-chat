@@ -44,6 +44,9 @@ export const loadPdfStore = async (file: File): Promise<LoadedStore> => {
   }
 
   const documents = await getDocumentsFromPdf(file);
+  if (!documents || documents.length === 0) {
+    throw new Error("No content could be extracted from PDF");
+  }
   const newStore = await createStore(pdfId, documents);
   return { id: pdfId, store: newStore };
 };

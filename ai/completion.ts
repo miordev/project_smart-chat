@@ -28,5 +28,7 @@ export const completion = async (
     steps += 1;
   } while (steps < maxSteps);
 
-  return new AIMessage("Reached tool call limit without final answer.");
+  return new AIMessage(
+    "I couldn't find a complete answer at this time. Please try rephrasing your question in a simpler way."
+  );
 };
