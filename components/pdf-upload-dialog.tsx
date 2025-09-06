@@ -22,12 +22,25 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file || file.size > 10 * 1024 * 1024 || !file.type.includes("pdf")) {
+    setError(null);
+
+    if (!file) {
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setError("File size exceeds 10MB limit");
+      return;
+    }
+
+    if (!file.type.includes("pdf")) {
+      setError("Only PDF files are supported");
       return;
     }
 
@@ -42,27 +55,30 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
         body: formData,
       });
 
-      // TODO: Handle errors
-      // TODO: Handle success
+      const data = await response.json();
       if (response.ok) {
-        // TODO: Add type for the response
-        const data = (await response.json()) as { id: string; name: string };
         onUploadSuccess(data.id, data.name);
         setIsOpen(false);
+      } else {
+        throw new Error(data.error);
       }
-      // else {
-      //   alert(data.error || "Upload failed");
-      // }
     } catch (error) {
       console.error("Upload error:", error);
-      // alert("Upload failed");
+      setError("Upload failed. Please try again");
     } finally {
       setIsUploading(false);
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      setError(null);
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
           variant="destructive"
@@ -107,6 +123,9 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
               )}
             </Button>
           </div>
+          {error && (
+            <p className="text-sm text-destructive font-medium">{error}</p>
+          )}
           <p className="text-sm text-muted-foreground">Supported up to 10MB</p>
         </div>
       </DialogContent>
