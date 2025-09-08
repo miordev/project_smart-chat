@@ -79,4 +79,4 @@ An intelligent chat app that enhances conversations using RAG (Retrieval Augment
 
 Check the demo video to see Smart Chat in action:
 
-<video src="public/demo.mp4" width="100%" controls></video>
+https://github.com/user-attachments/assets/950a746c-91fe-4e8d-94da-60cfab8294e4
