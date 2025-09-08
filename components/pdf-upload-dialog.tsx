@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FilePlus2, FileText, LoaderCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type PdfUploadDialogProps = {
   onUploadSuccess: (documentId: string, documentName: string) => void;
@@ -23,16 +24,12 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
   const [isOpen, setIsOpen] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [isDragging, setIsDragging] = React.useState(false);
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFileUpload = async (file: File) => {
     setError(null);
-
-    if (!file) {
-      return;
-    }
 
     if (file.size > 10 * 1024 * 1024) {
       setError("File size exceeds 10MB limit");
@@ -70,10 +67,41 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
     }
   };
 
+  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await handleFileUpload(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await handleFileUpload(file);
+    }
+  };
+
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
     if (!open) {
       setError(null);
+      setIsDragging(false);
     }
   };
 
@@ -96,7 +124,17 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center w-full gap-2">
-          <div className="flex flex-col items-center justify-center w-full gap-4 p-8 border-2 border-dashed rounded-lg transition-colors hover:border-primary">
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={cn(
+              "flex flex-col items-center justify-center w-full gap-4 p-8 border-2 border-dashed rounded-lg transition-colors",
+              isDragging
+                ? "border-primary bg-primary/10"
+                : "hover:border-primary"
+            )}
+          >
             <FileText size={48} className="text-muted-foreground" />
             <DialogDescription className="text-sm text-muted-foreground text-center">
               Drag and drop your PDF here, or click to browse

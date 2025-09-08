@@ -21,8 +21,6 @@ const toBaseMessage = (payload: MessagePayload): BaseMessage => {
   }
 };
 
-// TODO: Add type for the request body
-// TODO: Summarize the conversation history (https://js.langchain.com/docs/concepts/chat_history/)
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const messagePayloads = body.messagePayloads as MessagePayload[];
