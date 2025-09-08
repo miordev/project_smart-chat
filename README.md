@@ -43,6 +43,7 @@ An intelligent chat app that enhances conversations using RAG (Retrieval Augment
    ```
 
 3. **Configure environment**
+
    Create `.env` using the `.env.example` template with:
 
    ```env
