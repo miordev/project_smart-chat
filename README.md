@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🤖 Smart Chat
 
-## Getting Started
+An intelligent chat app that enhances conversations using RAG (Retrieval Augmented Generation) to provide accurate answers from multiple sources:
 
-First, run the development server:
+- PDF Documents
+- Website Links
+- YouTube Videos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[Try the Demo](https://smart-chat-ten.vercel.app/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Smart Search**: Uses RAG for accurate information retrieval
+- **Multiple Sources**: Support for PDFs, websites, and YouTube videos
+- **Secure**: Built-in authentication system
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔍 How It Works
 
-## Learn More
+1. **Upload Your Source:** Upload a PDF document, YouTube URL, or website link.
+2. **AI Processing**: The system processes the resource and creates vector embeddings for a semantic search.
+3. **Query Processing**: When you ask a question, the system retrieves the most relevant information from the source and sends it to the LLM for a more accurate response.
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Quick Start
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Prerequisites
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Node](https://nodejs.org/es/)
+- [PNPM](https://pnpm.io/es/)
 
-## Deploy on Vercel
+### Installation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Clone the repository**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   git clone https://github.com/miordev/project_smart-chat.git
+   cd project_smart-chat
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   pnpm install
+   ```
+
+3. **Configure environment**
+   Create `.env` using the `.env.example` template with:
+
+   ```env
+   # OpenAI API Configuration
+   OPENAI_API_KEY=your-api-key
+
+   # Auth Settings
+   DEMO_USERNAME=your-username
+   DEMO_PASSWORD=your-password
+
+   # Security
+   SESSION_SECRET=your-secure-random-string
+   ```
+
+4. **Launch the app**
+
+   ```bash
+   pnpm dev
+   ```
+
+5. **Access locally**
+
+   Open [http://localhost:3000](http://localhost:3000)
+
+## 🛠️ Built With
+
+- [Next.js](https://nextjs.org) - React Framework
+- [LangChain](https://js.langchain.com/) - AI Framework
+- [Tailwind CSS](https://tailwindcss.com/) - Styles
+- [Shadcn](https://ui.shadcn.com/) - Components
+- [OpenAI](https://openai.com/) - Large Language Model
+
+## 🎬 See It In Action
+
+Check the demo video to see Smart Chat in action:
+
+<video src="public/demo.mp4" width="100%" controls></video>
