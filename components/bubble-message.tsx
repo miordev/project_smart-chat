@@ -28,13 +28,13 @@ const BubbleHumanMessage: React.FC<BubbleHumanMessageProps> = ({ content }) => {
   return (
     <div className="flex flex-row justify-end">
       <div className="flex flex-row gap-2 items-start max-w-4/5">
-        <div className="min-w-0 flex-1 py-2 px-4 rounded-xl shadow-sm border-2 border-primary-foreground bg-primary">
-          <p className="text-sm break-words text-primary-foreground">
+        <div className="min-w-0 flex-1 py-2 px-4 rounded-xl shadow-sm border-2 border-primary/60 bg-primary/40">
+          <p className="text-sm break-words text-secondary-foreground">
             {content}
           </p>
         </div>
-        <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center border-2 border-primary-foreground bg-primary">
-          <User size={12} className="text-primary-foreground" />
+        <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center border-2 border-primary/60 bg-primary/40">
+          <User size={12} className="text-secondary-foreground" />
         </div>
       </div>
     </div>

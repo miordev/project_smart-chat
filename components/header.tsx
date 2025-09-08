@@ -20,7 +20,7 @@ export const Header = ({ className }: HeaderProps) => {
       <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-tr from-primary to-secondary">
         <Bot size={24} />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 items-center">
         <h1 className="text-2xl font-bold text-primary">Smart Chat</h1>
         <div className="flex flex-row gap-1 items-center">
           <p className="text-sm text-muted-foreground">Your personal AI</p>
