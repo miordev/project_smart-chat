@@ -1,6 +1,6 @@
-import { getStore } from "../stores";
+import { getStore } from "@/ai/stores";
 import { tool } from "@langchain/core/tools";
-import { ToolName } from "../types";
+import { ToolName } from "@/ai/types";
 import { z } from "zod";
 
 const pdfSearchSchema = z.object({

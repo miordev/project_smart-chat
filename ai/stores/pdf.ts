@@ -1,7 +1,7 @@
 import { CharacterTextSplitter } from "@langchain/textsplitters";
-import { createStore, getStore } from "./vector-store-registry";
+import { createStore, getStore } from "@/ai/stores/vector-store-registry";
 import { Document } from "@langchain/core/documents";
-import { DocumentId, LoadedStore } from "../types";
+import { DocumentId, LoadedStore } from "@/ai/types";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 

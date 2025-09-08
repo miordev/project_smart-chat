@@ -1,7 +1,7 @@
-import { ToolName } from "../types";
+import { ToolName } from "@/ai/types";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
-import { loadYoutubeStore } from "../stores";
+import { loadYoutubeStore } from "@/ai/stores";
 
 const youtubeSearchSchema = z.object({
   question: z.string().describe("A question about the video."),

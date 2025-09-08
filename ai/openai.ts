@@ -1,5 +1,5 @@
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { toolsByName } from "./tools";
+import { toolsByName } from "@/ai/tools";
 
 export const llm = new ChatOpenAI({
   model: "gpt-3.5-turbo",

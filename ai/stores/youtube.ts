@@ -1,7 +1,7 @@
 import { CharacterTextSplitter } from "@langchain/textsplitters";
-import { createStore, getStore } from "./vector-store-registry";
+import { createStore, getStore } from "@/ai/stores/vector-store-registry";
 import { Document } from "@langchain/core/documents";
-import { LoadedStore, DocumentId } from "../types";
+import { LoadedStore, DocumentId } from "@/ai/types";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 

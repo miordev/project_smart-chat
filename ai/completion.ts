@@ -1,7 +1,7 @@
 import { AIMessage, BaseMessage } from "@langchain/core/messages";
-import { llmWithTools } from "./openai";
-import { ToolName } from "./types";
-import { toolsByName } from "./tools";
+import { llmWithTools } from "@/ai/openai";
+import { ToolName } from "@/ai/types";
+import { toolsByName } from "@/ai/tools";
 
 export const completion = async (
   messages: BaseMessage[],

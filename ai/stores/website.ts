@@ -1,8 +1,8 @@
 import { CharacterTextSplitter } from "@langchain/textsplitters";
 import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
-import { createStore, getStore } from "./vector-store-registry";
+import { createStore, getStore } from "@/ai/stores/vector-store-registry";
 import { Document } from "@langchain/core/documents";
-import { LoadedStore, DocumentId } from "../types";
+import { LoadedStore, DocumentId } from "@/ai/types";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 
 const getWebsiteId = (url: string): DocumentId | null => {

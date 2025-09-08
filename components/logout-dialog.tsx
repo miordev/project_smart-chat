@@ -3,7 +3,7 @@
 import { signout } from "@/app/actions/auth";
 import { Loader2, LogOut } from "lucide-react";
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "@/components/ui/dialog";
 
 export const LogoutDialog: React.FC = () => {
   const [state, action, pending] = React.useActionState(signout, {});

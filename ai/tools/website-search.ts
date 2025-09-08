@@ -1,7 +1,7 @@
-import { ToolName } from "../types";
+import { ToolName } from "@/ai/types";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
-import { loadWebsiteStore } from "../stores";
+import { loadWebsiteStore } from "@/ai/stores";
 
 const websiteSearchSchema = z.object({
   question: z.string().describe("A question about the website."),

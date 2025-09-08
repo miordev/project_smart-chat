@@ -1,9 +1,9 @@
-import { calculatorTool } from "./calculator";
-import { pdfSearchTool } from "./pdf-search";
+import { calculatorTool } from "@/ai/tools/calculator";
+import { pdfSearchTool } from "@/ai/tools/pdf-search";
 import { StructuredToolInterface } from "@langchain/core/tools";
-import { ToolName } from "../types";
-import { youtubeSearchTool } from "./youtube-search";
-import { websiteSearchTool } from "./website-search";
+import { ToolName } from "@/ai/types";
+import { youtubeSearchTool } from "@/ai/tools/youtube-search";
+import { websiteSearchTool } from "@/ai/tools/website-search";
 
 export const toolsByName: Record<ToolName, StructuredToolInterface> = {
   [ToolName.CALCULATOR]: calculatorTool,
