@@ -31,8 +31,8 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
   const handleFileUpload = async (file: File) => {
     setError(null);
 
-    if (file.size > 10 * 1024 * 1024) {
-      setError("File size exceeds 10MB limit");
+    if (file.size > 3 * 1024 * 1024) {
+      setError("File size exceeds 3MB limit");
       return;
     }
 
@@ -164,7 +164,7 @@ export const PdfUploadDialog: React.FC<PdfUploadDialogProps> = ({
           {error && (
             <p className="text-sm text-destructive font-medium">{error}</p>
           )}
-          <p className="text-sm text-muted-foreground">Supported up to 10MB</p>
+          <p className="text-sm text-muted-foreground">Supported up to 3MB</p>
         </div>
       </DialogContent>
     </Dialog>
